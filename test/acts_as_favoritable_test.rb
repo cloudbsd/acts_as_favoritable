@@ -86,14 +86,36 @@ class ActsAsFavoritableTest < ActiveSupport::TestCase
   test "methods 'favorite/unfavorite/favoriting?' work" do
     post = Post.first
     user = User.first
+    article = Article.first
 
     assert !user.favoriting?(post)
+    assert_equal 0, Favorite.count
+    assert_equal 0, user.favorited_posts.size
+    assert_equal 0, user.favorited_articles.size
 
     user.favorite(post)
     assert user.favoriting?(post)
+    assert_equal 1, Favorite.count
+    assert_equal 1, user.favorited_posts.size
+    assert_equal 0, user.favorited_articles.size
+
+    user.favorite(article)
+    assert user.favoriting?(article)
+    assert_equal 2, Favorite.count
+    assert_equal 1, user.favorited_posts.size
+    assert_equal 1, user.favorited_articles.size
 
     user.unfavorite(post)
     assert !user.favoriting?(post)
+    assert_equal 1, Favorite.count
+    assert_equal 0, user.favorited_posts.size
+    assert_equal 1, user.favorited_articles.size
+
+    user.unfavorite(article)
+    assert !user.favoriting?(article)
+    assert_equal 0, Favorite.count
+    assert_equal 0, user.favorited_posts.size
+    assert_equal 0, user.favorited_articles.size
   end
 
   test "method 'favorite_by' is available" do

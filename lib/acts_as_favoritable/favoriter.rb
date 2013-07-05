@@ -13,18 +13,16 @@ module ActsAsFavoritable
       end # module ClassMethods
 
       def favoriting?(other)
-      # self.favorites.include? other
-        self.favorites.where(['favoritable_id=? AND favoritable_type=?', other.id, other.class.name]).size > 0
+        self.favorites.find_by(favoritable: other).present?
       end
 
       def favorite(other)
-      # self.favorites << other
-        self.favorites.create!(favoritable: other)
+        self.favorites.create(favoritable: other)
       end
 
       def unfavorite(other)
-      # self.favorites.delete other
-        self.favorites.where(['favoritable_id=? AND favoritable_type=?', other.id, other.class.name]).destroy_all
+        self.favorites.where(favoritable: other).destroy_all
+      # self.favorites.where(favoritable: other).delete_all
       end
 
     # def favorites_by_type(type_name)
