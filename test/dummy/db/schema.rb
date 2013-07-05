@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130705125438) do
+ActiveRecord::Schema.define(version: 20130705131435) do
 
   create_table "articles", force: true do |t|
     t.string   "title"
@@ -19,6 +19,18 @@ ActiveRecord::Schema.define(version: 20130705125438) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "favorites", force: true do |t|
+    t.integer  "favoritable_id",   null: false
+    t.string   "favoritable_type", null: false
+    t.integer  "favoriter_id",     null: false
+    t.string   "favoriter_type",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "favorites", ["favoritable_id", "favoritable_type"], name: "index_favorites_on_favoritable_id_and_favoritable_type"
+  add_index "favorites", ["favoriter_id", "favoriter_type"], name: "index_favorites_on_favoriter_id_and_favoriter_type"
 
   create_table "posts", force: true do |t|
     t.string   "title"
