@@ -123,13 +123,39 @@ class ActsAsFavoritableTest < ActiveSupport::TestCase
     assert post.respond_to? :favorite_by
   end
 
-  test "method 'favorite_by' works" do
+  test "methods 'favorite_by/unfavorite_by/favoriting_by?' work" do
     post = Post.first
     user = User.first
+    article = Article.first
 
-    post.favorite_by user
-    users = post.favoriting_users
-    assert_equal 1, users.size
-    assert_equal user, users[0]
+    assert !post.favoriting_by?(user)
+    assert !article.favoriting_by?(user)
+    assert_equal 0, Favorite.count
+    assert_equal 0, user.favorited_posts.size
+    assert_equal 0, user.favorited_articles.size
+
+    post.favorite_by(user)
+    assert post.favoriting_by?(user)
+    assert_equal 1, Favorite.count
+    assert_equal 1, user.favorited_posts.size
+    assert_equal 0, user.favorited_articles.size
+
+    article.favorite_by(user)
+    assert article.favoriting_by?(user)
+    assert_equal 2, Favorite.count
+    assert_equal 1, user.favorited_posts.size
+    assert_equal 1, user.favorited_articles.size
+
+    post.unfavorite_by(user)
+    assert !post.favoriting_by?(user)
+    assert_equal 1, Favorite.count
+    assert_equal 0, user.favorited_posts.size
+    assert_equal 1, user.favorited_articles.size
+
+    article.unfavorite_by(user)
+    assert !article.favoriting_by?(user)
+    assert_equal 0, Favorite.count
+    assert_equal 0, user.favorited_posts.size
+    assert_equal 0, user.favorited_articles.size
   end
 end
