@@ -96,18 +96,18 @@ class ActsAsFavoritableTest < ActiveSupport::TestCase
     assert !user.favoriting?(post)
   end
 
-# test "method 'favorited_by' is available" do
-#   post = Post.first
-#   assert post.respond_to? :favorited_by
-# end
+  test "method 'favorite_by' is available" do
+    post = Post.first
+    assert post.respond_to? :favorite_by
+  end
 
-# test "method 'favorited_by' works" do
-#   post = Post.first
-#   user = User.first
+  test "method 'favorite_by' works" do
+    post = Post.first
+    user = User.first
 
-#   user.favorite post
-#   users = Post.favorited_by user
-#   assert_equal 1, users.size
-#   assert_equal user, users[0]
-# end
+    post.favorite_by user
+    users = post.favoriting_users
+    assert_equal 1, users.size
+    assert_equal user, users[0]
+  end
 end
