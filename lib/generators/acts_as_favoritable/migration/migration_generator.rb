@@ -31,6 +31,7 @@ module ActsAsFavoritable
 
     def create_migration_file
       if self.class.orm_has_migration?
+      # template "favorite.rb", "app/models/favorite.rb"
         migration_template 'migration.rb', 'db/migrate/acts_as_favoritable_migration'
       end
     end
