@@ -13,7 +13,8 @@ module ActsAsFavoritable
       end # module ClassMethods
 
       def favoriting?(other)
-        self.favorites.find_by(favoritable: other).present?
+        self.favorites.exists?(favoritable: other)
+      # self.favorites.find_by(favoritable: other).present?
       end
 
       def favorite(other)
